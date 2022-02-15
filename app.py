@@ -1,9 +1,15 @@
 import requests
 import json
 import pandas as pd
+import pickle
 import streamlit as st
 from streamlit_custom_slider import st_custom_slider
 from streamlit_custom_slider import st_custom_select
+import streamlit.components.v1 as components
+import matplotlib.pyplot as plt
+import datetime
+import shap
+
 
 st.title('Python Real Time Scoring API + Model Explainer')
 
@@ -43,13 +49,48 @@ def user_input_features():
 
 json_data = user_input_features()
 
+def st_shap(plot, height=None):
+    shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
+    components.html(shap_html, height=height)
+
+# read pickle files
+with open('score_objects.pkl', 'rb') as handle:
+    d, features_selected, clf, explainer = pickle.load(handle)
+
+# explain model prediction results
+def explain_model_prediction(data):
+    # Calculate Shap values
+    shap_values = explainer.shap_values(data)
+    p = shap.force_plot(explainer.expected_value[1], shap_values[1], data)
+    return p, shap_values
+
 submit = st.button('Get predictions')
+
 if submit:
-    # Input Data , Format=Json
     results = requests.post(url+endpoint, json=json_data)
-    # Converting Output to Json Format
-    results = json.loads(results.text) 
+    results = json.loads(results.text)
     results = pd.DataFrame([results])
-    #It automaticaly detects its a pandas dataframe and displays it
-    # st.write(results) # Can also be passed to Custom Components
-    results
+
+    st.header('Final Result')
+    prediction = results["prediction"]
+    probability = results["probability"]
+
+    st.write("Prediction: ", int(prediction))
+    st.write("Probability: ", round(float(probability),3))
+
+    #explainer force_plot
+    results.drop(['prediction', 'probability'], axis=1, inplace=True)
+    results = results[features_selected]
+    p, shap_values = explain_model_prediction(results)
+    st.subheader('Model Prediction Interpretation Plot')
+    st_shap(p)
+
+    st.subheader('Summary Plot 1')
+    fig, ax = plt.subplots(nrows=1, ncols=1)
+    shap.summary_plot(shap_values[1], results)
+    st.pyplot(fig)
+
+    st.subheader('Summary Plot 2')
+    fig, ax = plt.subplots(nrows=1, ncols=1)
+    shap.summary_plot(shap_values[1], results, plot_type='bar')
+    st.pyplot(fig)
