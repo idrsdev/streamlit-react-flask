@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  pythonapi:
+    build: pythonapi/
+    ports:
+      - 5000:5000
+    networks:
+      - deploy_network
+    container_name: pythonapi
+    
+  reactapp:
+    build: streamlit_custom_slider/frontend
+    ports:
+      - 3001:3001
+    environment:
+      PORT: 3001
+    volumes:
+      - './:/app'
+    stdin_open: true
+    networks:
+      - deploy_network
+    container_name: reactapp
+
+  streamlitapi:
+    build: .
+    depends_on:
+      - reactapp
+    ports:
+        - 8501:8501
+    networks:
+      - deploy_network
+    container_name: streamlit
+
+networks:
+  deploy_network:
+    driver: bridge
