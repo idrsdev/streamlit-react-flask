@@ -5,6 +5,9 @@ services:
     build: pythonapi/
     ports:
       - 5000:5000
+    volumes:
+      - './pythonapi:/deploy'
+      
     networks:
       - deploy_network
     container_name: pythonapi
@@ -16,7 +19,7 @@ services:
     environment:
       PORT: 3001
     volumes:
-      - './:/app'
+      - './streamlit_custom_slider/frontend:/usr/src/app'
     stdin_open: true
     networks:
       - deploy_network
