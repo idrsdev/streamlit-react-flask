@@ -6,9 +6,9 @@ An App where we load react components into streamlit. The data can be received a
 
 A Streamlit Component is made out of a Python API and a frontend (built using any web tech you prefer).
 
-A Component can be used in any Streamlit app, can pass data between Python and frontend code, and and can optionally be distributed on [PyPI](https://pypi.org/) for the rest of the world to use.
+A Component can be used in any Streamlit app, can pass data between Python and frontend code, and can optionally be distributed on [PyPI](https://pypi.org/) for the rest of the world to use.
 
--   Create a component's API in a single line of Python:
+-   Initializing and Calling a Streamlit Component:
 
 ```python
 import streamlit.components.v1 as components
@@ -20,7 +20,7 @@ my_component = components.declare_component("my_component", path="frontend/build
 my_component(greeting="Hello", name="World")
 ```
 
--   Build the component's frontend out of HTML and JavaScript (or TypeScript, or ClojureScript, or whatever you fancy). React is supported, but not required:
+-   Creation of the above component's frontend can be accomplished by using HTML and JavaScript (or TypeScript, or ClojureScript, or whatever you fancy). React is supported, but not required:
 
 ```typescript
 class MyComponent extends StreamlitComponentBase {
@@ -49,15 +49,13 @@ Streamlit components follow the same model:
 
 3. If the user interacts with the widget, then the component handles a callback which may modify the internal state of the frontend component — this will then send the value back to the Streamlit Python script through the body of a JavaScript event. This also triggers a rerun of the Python script where the Python variable returned by the Streamlit call gets assigned the new value.
 
-![Overview](images/overview.PNG)
+![Overview](./Images/Overview.png)
 
 #### Reusability
 
-Plus, given Streamlit’s design, a component cannot call nor interact with other components using callbacks. In the same way that you can write a Streamlit script without callbacks between components, you can write a frontend component code without worrying about its behavior if other widgets on the same page call it.
+we can create multiple clones of the same component e.g we have reused the same Slider component with different parameters But they are independent of each other.
 
-`It means we can create multiple clones of one component e.g we have reused the same Slider component with different parameters But they are independent of each other`
-
-#### Docker Setup
+#### Project Docker Deployment
 
 ```
 docker-compose build
@@ -65,16 +63,11 @@ docker-compose up
 # The App is available at http://localhost:8501/
 ```
 
-#### How to Information
+#### Binding Between React & Python Components
 
-```
-streamlit_custom_slider/__init__.py
-# This is where we have declard connection to react Components and create custom streamlit components e.g st_custom_slider()
-# one thing to note here is that You cannot connect with multiple react components on same route e.g '/'
+```streamlit_custom_slider/__init__.py``` is where we declare connections between the react components and their corresponding streamlit components e.g st_custom_slider().
+One thing to note here is that You can not connect with multiple react components on same route e.g '/'. So in order to load more than one component, create different route for each component on react side.
 
-# This is the workaround, to load more than one components, create different route for each component on react side.
-
-```
 
 ##### Python Side
 
