@@ -71,7 +71,7 @@ One thing to note here is that You can not connect with multiple react component
 
 ##### Python Side
 
-```
+```python
 streamlit_custom_slider/__init__.py
 
 #Since we cannot connect/load multiple components from one url, e.g url="http://localhost:3001/"
@@ -99,7 +99,7 @@ def st_custom_slider(label: str, min_value: int, max_value: int, value: int = 0,
 
 ##### React Side
 
-```
+```javascript
 // A routing Snipppets from index.tsx (React)
 <Router>
          <Route path="/slider">
@@ -139,7 +139,7 @@ const onChange = (option) => {
 
 ##### Streamlit
 
-```
+```python
 app.py
 #Importing Our Custom Component
 from streamlit_custom_slider import st_custom_slider #from streamlit_custom_slider/__init__.py(Package)
@@ -159,7 +159,7 @@ node v16.14.0.
 
 Install and run streamlit locally
 
-```
+```bash
 $ python -m venv venv  # create venv
 $ . venv/bin/activate   # activate venv
 $ pip install -r requirements.txt # installing libraries
@@ -170,7 +170,7 @@ $ streamlit run app.py # Runs on port localhost:8501
 
 Install & Run Python/Flask API:
 
-```
+```bash
 # Flask API and its dependencies exists in pythonapi folder
 $ cd pythonapi
 $ python -m venv venv  # create venv
@@ -181,7 +181,7 @@ $ python app.y
 
 Our React App
 
-```
+```bash
 # The whole react app exists in frontend folder
 cd streamlit_custom_slider/frontend
 npm install
