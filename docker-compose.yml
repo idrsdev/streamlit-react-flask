@@ -18,6 +18,7 @@ services:
       - 3001:3001
     environment:
       PORT: 3001
+      CHOKIDAR_USEPOLLING: true
     volumes:
       - './streamlit_custom_slider/frontend:/usr/src/app'
     stdin_open: true

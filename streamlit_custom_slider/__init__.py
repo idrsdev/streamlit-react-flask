@@ -8,7 +8,7 @@ _dropdown_func = components.declare_component(
     url="http://localhost:3001/dropdown",
 )
 
-def st_custom_select(label: str, options:[],default, key=None) -> str:
+def st_custom_select(label: str, options:list,default, key=None) -> str:
     component_value = _dropdown_func(label=label, options=options,default=default,key=key)
     return component_value
 

@@ -65,24 +65,16 @@ docker-compose up
 
 #### Binding Between React & Python Components
 
-```streamlit_custom_slider/__init__.py``` is where we declare connections between the react components and their corresponding streamlit components e.g st_custom_slider().
+`streamlit_custom_slider/__init__.py` is where we declare connections between the react components and their corresponding streamlit components e.g st_custom_slider().
 One thing to note here is that You can not connect with multiple react components on same route e.g '/'. So in order to load more than one component, create different route for each component on react side.
-
 
 ##### Python Side
 
+`$ streamlit_custom_slider/__init__.py` File
+This is where we define the connection to react component. We can pass parameters/args to react. These functions could also return a value which can be stored in a variable when we call these function in streamlit. Below first we connect to a component and then use that connection to pass data. We can also pass a default return value here.
+
 ```python
-streamlit_custom_slider/__init__.py
-
-#Since we cannot connect/load multiple components from one url, e.g url="http://localhost:3001/"
-#Breaking components into multiple routes, e.g /dropdown, /slider.
-
-_dropdown_func = components.declare_component(
-    "custom_select",
-    url="http://localhost:3001/dropdown",
-)
-
-#To connect with <CustomSlider /> on react side, Along with passing data this is how we do it,
+#To connect with <CustomSlider /> on react side, Along with passing parameters/args this is how we do it,
 _component_func = components.declare_component(
     "custom_slider",
     url="http://localhost:3001/slider",
@@ -94,62 +86,65 @@ def st_custom_slider(label: str, min_value: int, max_value: int, value: int = 0,
     component_value = _component_func(label=label, minValue=min_value, maxValue=max_value, initialValue=[value], key=key, *default=[value]*)
     return component_value[0]
 
-# As custom components return value to python scrips, initiallt the value is zero(The default value we set above)
+# The default value which function returns on initialization is zero.
+# It returns new value when we call Streamlit.setComponentValue()
 ```
 
 ##### React Side
 
+We can have more than one component structured in this way. We can destructure the arguments and utilize them to create User interface. Here it is a custom slider but it can be anything like a slider,toggle or charts etc.
+
 ```javascript
-// A routing Snipppets from index.tsx (React)
+// import CustomSelect from "./CustomSelect"
 <Router>
-         <Route path="/slider">
-           <StyletronProvider value={engine}>
-              <ThemeProvider theme={LightTheme}>
-                <CustomSlider />
-              </ThemeProvider>
-            </StyletronProvider>
-         </Route>
+    <Route path='/dropdown'>
+        <CustomSelect />
+    </Route>
 
-          <Route path="/dropdown">
-            <CustomSelect />
-          </Route>
-
-      {/* <Route path="/dropdown">
+    {/* <Route path="/path">m 
             <Component Here />
           </Route>  */}
 </Router>
+```
 
-//Two Important things, If you don't set the height, the component will not be visisble, taken from < CustomSelect />
+#### Things to take into consideration with react
 
+Two Important things, If you don't set the height, the component will not be visisble when used in streamlit.
+
+```
 useEffect(() => {
     Streamlit.setFrameHeight()
-  })
+})
 
 //On Items like dropdown, to change component height on streamlit side on state toggle
- const onDropdownToggle = () => {
+const onDropdownToggle = () => {
     Streamlit.setFrameHeight()
-  }
+}
+```
 
-//These components return value to streamlit, where they are loaded but how?
+To send value back to python from react using `Streamlit.setComponentValue(x)`. This is the
+
+```
+//These components return value to streamlit e.g useEffect etc
 const onChange = (option) => {
-    Streamlit.setComponentValue(option[0].value) //This sets the value of a component
-    //Streamlit.setComponentValue(valueHere)
-  }
+    Streamlit.setComponentValue(valueHere)
+}
 ```
 
 ##### Streamlit
 
+here In `app.py` file we used that bridge we created in `streamlit_custom_slider/__init__.py` and use it to create our User Interface. `App.py` is the main file run by streamlit and that's where our core logic is. It is responsible for displaying our whole website. Here we use streamlit as well as custom components and pass parameters to them. The below custom component will show a slider on the screen
+
 ```python
-app.py
 #Importing Our Custom Component
-from streamlit_custom_slider import st_custom_slider #from streamlit_custom_slider/__init__.py(Package)
+#from streamlit_custom_slider/__init__.py(Package)
+from streamlit_custom_slider import st_custom_slider
 #using them
-input_features["age"] = st_custom_slider('Age', 18, 95, 50, key="age")
-
-
+a = st_custom_slider('Age', 18, 95, 50, key="age")
+#Any return value is stored in a
 ```
 
-#### Local Setup
+#### Required only for Local Setup
 
 ```
 # Requirments
