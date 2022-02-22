@@ -1,6 +1,6 @@
 # Streamlit Custom Components
 
-An App where we load react components into streamlit. The data can be received and passed to these react components. We also integrated Flask API to make our requests allowing us to utilize machine learning models deloyed with Flask.
+An app where we load react components into streamlit. The data can be received and passed to these react components. We also integrated Flask API to make our requests allowing us to utilize machine learning models deloyed with Flask.
 ![Alt Text](./Images/demo.gif)
 
 #### Overview
