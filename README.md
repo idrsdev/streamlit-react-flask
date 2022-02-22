@@ -1,6 +1,6 @@
 # Streamlit Custom Components
 
-An App where we load react components into streamlit. The data can be received and passed to these react components. We also integrated Flask API to make our requests allowing us to utilize machine learning models deloyed with Flask
+An App where we load react components into streamlit. The data can be received and passed to these react components. We also integrated Flask API to make our requests allowing us to utilize machine learning models deloyed with Flask.
 
 #### Overview
 
@@ -71,7 +71,7 @@ One thing to note here is that You can not connect with multiple react component
 ##### Python Side
 
 `$ streamlit_custom_slider/__init__.py` File
-This is where we define the connection to react component. We can pass parameters/args to react. These functions could also return a value which can be stored in a variable when we call these function in streamlit. Below first we connect to a component and then use that connection to pass data. We can also pass a default return value here.
+This is where we define the connection to react component. We can pass parameters/args to react. These functions could also return a value which can be stored in a variable when we call these function in streamlit. In the code snippet below we have defined a connection to the custom slider component and then use that connection to pass data. We can also pass a default return value here.
 
 ```python
 #To connect with <CustomSlider /> on react side, Along with passing parameters/args this is how we do it,
@@ -92,7 +92,7 @@ def st_custom_slider(label: str, min_value: int, max_value: int, value: int = 0,
 
 ##### React Side
 
-We can have more than one component structured in this way. We can destructure the arguments and utilize them to create User interface. Here it is a custom slider but it can be anything like a slider,toggle or charts etc.
+As show in the code block below, we can define more the one component with their unqiue routes. Within these components we can destructure the arguments as show in the above sections.
 
 ```javascript
 // import CustomSelect from "./CustomSelect"
@@ -122,8 +122,7 @@ const onDropdownToggle = () => {
 }
 ```
 
-To send value back to python from react using `Streamlit.setComponentValue(x)`. This is the
-
+To return value back to python from react the method `Streamlit.setComponentValue(<x>)` is utilized.
 ```
 //These components return value to streamlit e.g useEffect etc
 const onChange = (option) => {
@@ -133,7 +132,7 @@ const onChange = (option) => {
 
 ##### Streamlit
 
-here In `app.py` file we used that bridge we created in `streamlit_custom_slider/__init__.py` and use it to create our User Interface. `App.py` is the main file run by streamlit and that's where our core logic is. It is responsible for displaying our whole website. Here we use streamlit as well as custom components and pass parameters to them. The below custom component will show a slider on the screen
+In `app.py` file we used the bridge we created in `streamlit_custom_slider/__init__.py`. `App.py` is the main file that is executed by streamlit and that's where our core logic is. It is responsible for building the whole website. Here we use streamlit as well as custom components and pass parameters to them. As an example, below we use custom component to display a slider on the UI.
 
 ```python
 #Importing Our Custom Component
