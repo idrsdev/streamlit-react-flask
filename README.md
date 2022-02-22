@@ -42,7 +42,7 @@ class MyComponent extends StreamlitComponentBase {
 
 `Each Streamlit call on the Python side loads up a React component from the running Streamlit server, which is then rendered onto your web browser.`
 
-Streamlit components follow the same model:
+Streamlit components model is as follow:
 
 1. A Streamlit Python call is mapped into a set of HTML/CSS/JS code or frontend code. Python arguments passed through the Streamlit call are then sent through the body of a JavaScript event. In the case of the React template, those arguments then become props of the React component.
 
@@ -127,7 +127,7 @@ To return value back to python from react the method `Streamlit.setComponentValu
 
 ```
 //These components return value to streamlit e.g useEffect etc
-const onChange = (option) => {
+const onChange = (valueHere) => {
     Streamlit.setComponentValue(valueHere)
 }
 ```
